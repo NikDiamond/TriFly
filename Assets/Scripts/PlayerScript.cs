@@ -8,6 +8,8 @@ public class PlayerScript : MonoBehaviour
     KeyCode jumpKey;
     [SerializeField]
     float rotateSpeed;
+    [SerializeField]
+    bool godMode = false;
 
     bool flying;
     float rotation;
@@ -16,6 +18,7 @@ public class PlayerScript : MonoBehaviour
     {
         if (col.gameObject.tag == "enemy")
         {
+            if (godMode) return;
             GameMaster.GameOver = true;
         }
         if (col.gameObject.tag == "floor")
