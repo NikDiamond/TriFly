@@ -80,6 +80,7 @@ public class GameController : MonoBehaviour {
         GameObject.Find("player").GetComponent<PolygonCollider2D>().enabled = false;
         GameObject.Find("player").GetComponent<PlayerScript>().Jump();
         Destroy(GameObject.Find("borders").gameObject);
+        //Destroy(GameObject.Find("light").gameObject);
         Destroy(GameObject.Find("middle_bg").gameObject);
         Destroy(GameObject.Find("top_bg").gameObject);
         Destroy(GameObject.Find("bottom_bg").gameObject);

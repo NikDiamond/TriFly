@@ -10,6 +10,10 @@ public class PlayerScript : MonoBehaviour
     float rotateSpeed;
     [SerializeField]
     bool godMode = false;
+    [SerializeField]
+    GameObject top_light;
+    [SerializeField]
+    GameObject bot_light;
 
     bool flying;
     float rotation;
@@ -29,7 +33,7 @@ public class PlayerScript : MonoBehaviour
 
     void Update()
     {
-        if ((Input.touchCount > 0 || Input.GetKeyDown(jumpKey)) && !flying)
+        if (Input.touchCount > 0 || Input.GetKeyDown(jumpKey))
         {
             Jump();
         }
@@ -42,8 +46,28 @@ public class PlayerScript : MonoBehaviour
         if (transform.eulerAngles.z < 10) transform.eulerAngles = new Vector3(0f, 0f, 0f);
     }
 
-    public void Jump() {
+    public void Jump()
+    {
+        if (flying) return;
         GetComponent<Rigidbody2D>().gravityScale = GetComponent<Rigidbody2D>().gravityScale * -1;
+
+        Color full = top_light.gameObject.GetComponent<SpriteRenderer>().color;
+        full.a = 255f;
+        Color trans = full;
+        trans.a = 0f;
+
+        if (GetComponent<Rigidbody2D>().gravityScale < 0)
+        {
+            top_light.gameObject.GetComponent<SpriteRenderer>().color = full;
+            bot_light.gameObject.GetComponent<SpriteRenderer>().color = trans;
+        }
+        else
+        {
+
+            top_light.gameObject.GetComponent<SpriteRenderer>().color = trans;
+            bot_light.gameObject.GetComponent<SpriteRenderer>().color = full;
+        }
+
         flying = true;
         rotation += 180;
         rotation = rotation % 360;
