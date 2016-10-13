@@ -46,9 +46,11 @@ public class PlayerScript : MonoBehaviour
         if (transform.eulerAngles.z < 10) transform.eulerAngles = new Vector3(0f, 0f, 0f);
     }
 
-    public void Jump()
+    public void Jump(bool sound = true)
     {
         if (flying) return;
+        if(sound)
+            GetComponent<AudioSource>().Play();
         GetComponent<Rigidbody2D>().gravityScale = GetComponent<Rigidbody2D>().gravityScale * -1;
 
         Color full = top_light.gameObject.GetComponent<SpriteRenderer>().color;

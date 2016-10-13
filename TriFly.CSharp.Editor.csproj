@@ -102,6 +102,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="TriFly.CSharp.Plugins.csproj">
+      <Project>{E0F92BD8-90B2-44B2-F57E-B7F6211FD2F9}</Project>
+      <Name>TriFly.CSharp.Plugins</Name>
+    </ProjectReference>
     <ProjectReference Include="TriFly.CSharp.csproj">
       <Project>{20969E67-851A-A755-7D96-919ED82F8372}</Project>
       <Name>TriFly.CSharp</Name>
@@ -134,6 +138,7 @@
     <None Include="Assets\GooglePlayGames\Editor\template-Constants.txt" />
     <None Include="Assets\GooglePlayGames\Editor\template-GameInfo.txt" />
     <None Include="Assets\PlayServicesResolver\Editor\play-services-resolver.txt" />
+    <None Include="Assets\Plugins\Android\AndroidManifest.xml" />
     <None Include="Assets\Plugins\Android\GoogleMobileAdsPlugin\AndroidManifest.xml" />
     <None Include="Assets\Plugins\Android\MainLibProj\AndroidManifest.xml" />
   </ItemGroup>

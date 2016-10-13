@@ -5,31 +5,48 @@ using GoogleMobileAds.Api;
 public class Advert : MonoBehaviour {
 
     [SerializeField]
-    private string banner;
-    [SerializeField]
-    private string fullScreen;
+    private string _banner;
+    private static string banner;
 
     [SerializeField]
-    private bool banner_enabled;
+    private string _fullScreen;
+    private static string fullScreen;
+
     [SerializeField]
-    private bool fullScreen_enabled;
+    private int _fullScreenFrequency;
+    public static int fullScreenFrequency;
+
+    [SerializeField]
+    private bool _bannerEnabled;
+    private static bool banner_enabled;
+
+    [SerializeField]
+    private bool _fullScreenEnabled;
+    private static bool fullScreen_enabled;
 
     private static bool banner_loaded = false;
     private static bool fullScreen_running = false;
 
-    private InterstitialAd interstitial;
-    private BannerView bannerView;
+    private static InterstitialAd interstitial;
+    private static BannerView bannerView;
 
     // Use this for initialization
     void Start () {
-        if(banner_enabled)
+        banner = _banner;
+        fullScreen = _fullScreen;
+        banner_enabled = _bannerEnabled;
+        fullScreen_enabled = _fullScreenEnabled;
+        fullScreenFrequency = _fullScreenFrequency;
+
+        if (banner_enabled)
             RequestBanner();
 
         if (fullScreen_enabled)
             RequestInterstitial();
+        
     }
 
-    private void RequestBanner()
+    private static void RequestBanner()
     {
         if (banner_loaded) return;
         banner_loaded = true;
@@ -50,7 +67,7 @@ public class Advert : MonoBehaviour {
         bannerView.LoadAd(request); 
     }
 
-    private void RequestInterstitial()
+    private static void RequestInterstitial()
     {
         #if UNITY_ANDROID
             string adUnitId = fullScreen;
@@ -65,22 +82,54 @@ public class Advert : MonoBehaviour {
         // Load the interstitial with the request.
         interstitial.LoadAd(request);
 
-        interstitial.OnAdLoaded += FullScreenLoaded;
-        interstitial.OnAdFailedToLoad += FullScreenDestroy;
-        interstitial.OnAdClosed += FullScreenDestroy;
-        interstitial.OnAdLeavingApplication += FullScreenDestroy;
+        //interstitial.OnAdLoaded += OpenInterstitial;
+        interstitial.OnAdFailedToLoad += _CloseInterstitial;
+        interstitial.OnAdClosed += _CloseInterstitial;
+        interstitial.OnAdLeavingApplication += _CloseInterstitial;
     }
 
-    private void FullScreenLoaded(object sender, System.EventArgs args)
+    //PUBLIC METHODS
+    public static void OpenBanner()
+    {
+        if (bannerView == null) return;
+        bannerView.Show();
+        Debug.Log("[Ads] Banner opened");
+    }
+
+    public static void CloseBanner()
+    {
+        if (bannerView == null) return;
+        bannerView.Hide();
+        Debug.Log("[Ads] Banner closed");
+    }
+
+    private static void InterstitialLoaded(object sender, System.EventArgs args)
+    {
+        OpenInterstitial();
+    }
+
+    public static void OpenInterstitial()
     {
         if (fullScreen_running) return;
+        if (!interstitial.IsLoaded()) return;
+        CloseBanner();
+
         fullScreen_running = true;
         interstitial.Show();
+        Debug.Log("[Ads] Interstitial opened");
     }
 
-    private void FullScreenDestroy(object sender, System.EventArgs args)
+    private static void _CloseInterstitial(object sender, System.EventArgs args)
+    {
+        CloseInterstitial();
+    }
+
+    public static void CloseInterstitial()
     {
         interstitial.Destroy();
         fullScreen_running = false;
+
+        RequestInterstitial();
+        Debug.Log("[Ads] Interstitial closed");
     }
 }

@@ -12,6 +12,8 @@ public class GameController : MonoBehaviour {
     private bool once = false;
     private float startTime;
 
+    private static int deathCount = 0;
+
     void Start()
     {
         startTime = Time.time;
@@ -23,6 +25,7 @@ public class GameController : MonoBehaviour {
         playButton.gameObject.SetActive(false);
         reloadButton.gameObject.SetActive(false);
         exitButton.gameObject.SetActive(false);
+        Advert.OpenBanner();
     }
 
     void Update () {
@@ -66,6 +69,8 @@ public class GameController : MonoBehaviour {
         if (once) return;
         once = true;
 
+        deathCount++;
+
         //save record
         int lastScore = PlayerPrefs.GetInt("score", 0);
         if (GameMaster.Score > lastScore) PlayerPrefs.SetInt("score", GameMaster.Score);
@@ -78,12 +83,18 @@ public class GameController : MonoBehaviour {
         exitButton.gameObject.SetActive(true);
 
         GameObject.Find("player").GetComponent<PolygonCollider2D>().enabled = false;
-        GameObject.Find("player").GetComponent<PlayerScript>().Jump();
+        GameObject.Find("player").GetComponent<PlayerScript>().Jump(false);
         Destroy(GameObject.Find("borders").gameObject);
         //Destroy(GameObject.Find("light").gameObject);
         Destroy(GameObject.Find("middle_bg").gameObject);
         Destroy(GameObject.Find("top_bg").gameObject);
         Destroy(GameObject.Find("bottom_bg").gameObject);
         GameObject.Find("enemies").GetComponent<LevelGenerator>().enabled = false;
+
+        if (deathCount >= Advert.fullScreenFrequency)
+        {
+            Advert.OpenInterstitial();
+            deathCount = 0;
+        }
     }
 }
