@@ -300,8 +300,10 @@
     <Compile Include="Assets\Scripts\GameMaster.cs" />
     <Compile Include="Assets\Scripts\LevelGenerator.cs" />
     <Compile Include="Assets\Scripts\MenuScript.cs" />
+    <Compile Include="Assets\Scripts\PlayServicesScript.cs" />
     <Compile Include="Assets\Scripts\PlayerScript.cs" />
     <Compile Include="Assets\Scripts\ScoreUpdate.cs" />
+    <Compile Include="Assets\Scripts\SettingsPageScript.cs" />
     <Compile Include="Assets\Scripts\backScrolling.cs" />
   </ItemGroup>
   <ItemGroup>

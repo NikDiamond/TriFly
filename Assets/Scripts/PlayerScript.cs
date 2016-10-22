@@ -33,7 +33,7 @@ public class PlayerScript : MonoBehaviour
 
     void Update()
     {
-        if (Input.touchCount > 0 || Input.GetKeyDown(jumpKey))
+        if ((Input.touchCount > 0 && Input.touches[0].position.y < Screen.height - Screen.height/4) || Input.GetKeyDown(jumpKey))
         {
             Jump();
         }
@@ -49,7 +49,7 @@ public class PlayerScript : MonoBehaviour
     public void Jump(bool sound = true)
     {
         if (flying) return;
-        if(sound)
+        if(sound && GameMaster.soundEnabled())
             GetComponent<AudioSource>().Play();
         GetComponent<Rigidbody2D>().gravityScale = GetComponent<Rigidbody2D>().gravityScale * -1;
 

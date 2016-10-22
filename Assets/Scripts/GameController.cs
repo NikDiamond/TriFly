@@ -45,6 +45,16 @@ public class GameController : MonoBehaviour {
     }
 
     public void PlayGame() {
+        StartCoroutine(Unpause());
+    }
+
+    IEnumerator Unpause()
+    {
+        float time = 3;
+        float start = Time.realtimeSinceStartup;
+        while (Time.realtimeSinceStartup < start + time)
+            yield return null;
+
         Time.timeScale = 1;
         pauseButton.gameObject.SetActive(true);
         playButton.gameObject.SetActive(false);
@@ -77,7 +87,8 @@ public class GameController : MonoBehaviour {
 
         //remove scene
         reloadButton.SetActive(true);
-        reloadButton.GetComponentInChildren<UnityEngine.UI.Image>().enabled = true;
+        reloadButton.transform.GetChild(0).gameObject.SetActive(true);
+
         pauseButton.gameObject.SetActive(false);
         playButton.gameObject.SetActive(false);
         exitButton.gameObject.SetActive(true);

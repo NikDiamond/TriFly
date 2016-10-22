@@ -22,4 +22,14 @@ public class GameMaster : MonoBehaviour {
     {
         SceneManager.LoadScene(1);
     }
+
+    public static bool soundEnabled()
+    {
+        return (PlayerPrefs.GetInt("soundEnabled", 1) == 1);
+    }
+
+    public static void setSoundEnabled(bool state)
+    {
+        PlayerPrefs.SetInt("soundEnabled", (state ? 1 : 0));
+    }
 }

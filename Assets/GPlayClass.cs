@@ -24,7 +24,12 @@
 
 public static class GPlayClass
 {
+        public const string achievement_5 = "CgkI7oXu-e8GEAIQBQ"; // <GPGSID>
         public const string leaderboard_leaderboard = "CgkI7oXu-e8GEAIQAA"; // <GPGSID>
+        public const string achievement_1 = "CgkI7oXu-e8GEAIQAQ"; // <GPGSID>
+        public const string achievement_2 = "CgkI7oXu-e8GEAIQAg"; // <GPGSID>
+        public const string achievement_3 = "CgkI7oXu-e8GEAIQAw"; // <GPGSID>
+        public const string achievement_4 = "CgkI7oXu-e8GEAIQBA"; // <GPGSID>
 
 }
 

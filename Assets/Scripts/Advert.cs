@@ -13,6 +13,10 @@ public class Advert : MonoBehaviour {
     private static string fullScreen;
 
     [SerializeField]
+    private string _video;
+    private static string video;
+
+    [SerializeField]
     private int _fullScreenFrequency;
     public static int fullScreenFrequency;
 
@@ -28,12 +32,14 @@ public class Advert : MonoBehaviour {
     private static bool fullScreen_running = false;
 
     private static InterstitialAd interstitial;
+    private static InterstitialAd videoAd;
     private static BannerView bannerView;
 
     // Use this for initialization
     void Start () {
         banner = _banner;
         fullScreen = _fullScreen;
+        video = _video;
         banner_enabled = _bannerEnabled;
         fullScreen_enabled = _fullScreenEnabled;
         fullScreenFrequency = _fullScreenFrequency;
@@ -43,6 +49,8 @@ public class Advert : MonoBehaviour {
 
         if (fullScreen_enabled)
             RequestInterstitial();
+
+        RequestVideo();
         
     }
 
@@ -88,6 +96,27 @@ public class Advert : MonoBehaviour {
         interstitial.OnAdLeavingApplication += _CloseInterstitial;
     }
 
+    private static void RequestVideo()
+    {
+        #if UNITY_ANDROID
+            string adUnitId = video;
+        #else
+            string adUnitId = "unexpected_platform";
+        #endif
+
+        // Initialize an InterstitialAd.
+        videoAd = new InterstitialAd(adUnitId);
+        // Create an empty ad request.
+        AdRequest request = new AdRequest.Builder().Build();
+        // Load the interstitial with the request.
+        videoAd.LoadAd(request);
+
+        //interstitial.OnAdLoaded += OpenInterstitial;
+        videoAd.OnAdFailedToLoad += _CloseVideo;
+        videoAd.OnAdClosed += _CloseVideo;
+        videoAd.OnAdLeavingApplication += _CloseVideo;
+    }
+
     //PUBLIC METHODS
     public static void OpenBanner()
     {
@@ -119,17 +148,39 @@ public class Advert : MonoBehaviour {
         Debug.Log("[Ads] Interstitial opened");
     }
 
+    public static void OpenVideo()
+    {
+        if (!videoAd.IsLoaded()) return;
+        CloseBanner();
+
+        videoAd.Show();
+    }
+
     private static void _CloseInterstitial(object sender, System.EventArgs args)
     {
         CloseInterstitial();
     }
 
+    private static void _CloseVideo(object sender, System.EventArgs args)
+    {
+        CloseVideo();
+    }
+
     public static void CloseInterstitial()
     {
-        interstitial.Destroy();
+        if(interstitial != null)
+            interstitial.Destroy();
         fullScreen_running = false;
 
         RequestInterstitial();
         Debug.Log("[Ads] Interstitial closed");
+    }
+
+    public static void CloseVideo()
+    {
+        if (videoAd != null)
+            videoAd.Destroy();
+
+        RequestVideo();
     }
 }
